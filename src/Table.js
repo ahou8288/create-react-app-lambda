@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import ReactTable from "react-table";
+import 'react-table/react-table.css'
 
 class Table extends Component {
   constructor(props) {
@@ -6,28 +8,48 @@ class Table extends Component {
     this.state = { loading: false, msg: null };
   }
 
-  handleClick = api => e => {
-    e.preventDefault();
-
-    this.setState({ loading: true });
-    fetch('/.netlify/functions/' + api)
+  fetchLevels = function function_name() {
+    fetch('/.netlify/functions/rivers')
       .then(response => response.json())
-      .then(json => this.setState({ loading: false, msg: json.msg }));
-  };
+      .then(res => this.setState({
+          data: res.data.rows,
+          loading: false
+        }));
+  }
 
   render() {
     const { loading, msg } = this.state;
 
     return (
       <p>
-        <button onClick={this.handleClick('hello')}>
-          {loading ? 'Loading...' : 'Call Lambda'}
-        </button>
-        <button onClick={this.handleClick('async-chuck-norris')}>
-          {loading ? 'Loading...' : 'Call Async Lambda'}
-        </button>
-        <br />
-        <span>{msg}</span>
+        <h2>River Levels</h2>
+        <ReactTable
+          defaultPageSize={10}
+          columns={[
+            {
+              Header: "River",
+              accessor: "river"
+            },
+            {
+              Header: "Height",
+              accessor: "height"
+            },
+            {
+              Header: "Time",
+              accessor: "time"
+            }
+          ]}
+          data={this.state.data} // should default to []
+          pages={this.state.pages} // should default to -1 (which means we don't know how many pages we have)
+          loading={this.state.loading}
+          manual // informs React Table that you'll be handling sorting and pagination server-side
+          onFetchData={(state, instance) => {
+            // show the loading overlay
+            this.setState({loading: true});
+            // fetch your data
+            this.fetchLevels();
+          }}
+        />
       </p>
     );
   }
