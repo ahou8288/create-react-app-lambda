@@ -6,9 +6,7 @@ const newRiver = () => {
   };
 };
 
-const riverInfo = { data: {
-    rows: [newRiver(),newRiver(),newRiver()]
-}}
+const riverInfo = [newRiver(),newRiver(),newRiver()]
 
 export function handler(event, context, callback) {
   // console.log('queryStringParameters', event.queryStringParameters);

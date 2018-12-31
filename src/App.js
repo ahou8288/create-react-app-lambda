@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Table from './Table.js'
+import RiverTable from './Table.js'
 
 class App extends Component {
   render() {
@@ -7,7 +7,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1>Aqua Gorilla</h1>
-          <Table />
+          <RiverTable />
         </header>
       </div>
     );
